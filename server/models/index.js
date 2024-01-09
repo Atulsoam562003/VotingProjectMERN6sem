@@ -7,4 +7,4 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DATABASE);
 
 module.exports.User = require('./user');
-module.exports.Polls = require('./poll');
+module.exports.Poll = require('./poll');

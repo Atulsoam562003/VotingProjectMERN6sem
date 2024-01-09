@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.get('/' , (req , res) => { res.json("Hello World");});
 
 app.use('/api/auth' , routes.auth);
+app.use('/api/polls' , routes.poll);
 
 app.use(handle.notFound);
 
