@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start" : "nodemon" ,
+    "seed" : "node seed.js"
+  },
   "author": "Atul Soam",
   "license": "ISC",
   "dependencies": {
