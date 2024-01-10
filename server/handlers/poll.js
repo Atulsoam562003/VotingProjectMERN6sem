@@ -79,6 +79,9 @@ exports.deletePoll = async (req ,res, next) => {
         }
 
         await poll.deleteOne();
+        const UserOfPoll = await db.User.findById(pollId);
+
+        await UserOfPoll.deleteOne(); //updated as for cascade delete
 
         res.status(202).json(poll);
 
@@ -95,7 +98,7 @@ exports.vote = async (req , res , next) => {
         const {answer} = req.body;
 
         if(answer) {
-            const poll = await db.poll.findById(pollId);
+            const poll = await db.Poll.findById(pollId);
             if(!poll) throw new Error('No poll found');
 
             const vote = poll.options.map(
@@ -104,7 +107,7 @@ exports.vote = async (req , res , next) => {
                         return {
                             option : option.option ,
                             _id : option._id,
-                            votes : option.vote + 1
+                            votes : option.votes + 1
                         };
                     }
                     else {
