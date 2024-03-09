@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { logout } from "../store/actions";
 
+const validUser = "atul.soam21b@iiitg.ac.in";
 const Navbar = ({ auth, logout }) => (
   <div className="navbar">
     <div className="container">
@@ -28,7 +29,7 @@ const Navbar = ({ auth, logout }) => (
             </li>
           </Fragment>
         )}
-        {auth.isAuthenticated && (
+        {auth.isAuthenticated && auth.user.username === validUser && (
           <Fragment>
             <li>
               {/* <Link className="navbar-item" to="/test">
@@ -38,6 +39,10 @@ const Navbar = ({ auth, logout }) => (
                 Create Poll
               </Link>
             </li>
+          </Fragment>
+        )}
+        {auth.isAuthenticated && (
+          <Fragment>
             <li>
               <a className="navbar-item" onClick={logout}>
                 Logout

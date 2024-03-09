@@ -15,6 +15,7 @@ import TestPage from "../pages/TestPage";
 import HomePage from "../pages/HomePage";
 import PollPage from "../pages/PollPage";
 import CreatePollPage from "../pages/CreatePollPage";
+import Polls from "../components/Polls";
 
 function withRouter(Component) {
   function ComponentWithRouterProp(props) {
@@ -28,6 +29,7 @@ function withRouter(Component) {
 
 const RouteViews = (props) => {
   const { auth } = props;
+  console.log(props);
   return (
     <main>
       <Routes>
@@ -52,6 +54,7 @@ const RouteViews = (props) => {
             />
           }
         />
+        <Route exact path="/poll" element={<Polls {...props} />} />
         <Route
           exact
           path="/poll/new"

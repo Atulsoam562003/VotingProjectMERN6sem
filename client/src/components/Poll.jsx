@@ -42,7 +42,11 @@ const Poll = (props) => {
     <div>
       <h3 className="poll-title">{poll.question}</h3>
       <div className="button-center">{answers}</div>
-      {poll.options && <Pie data={data} />}
+      {poll.options && (
+        <div className="pie">
+          <Pie data={data} />
+        </div>
+      )}
     </div>
   );
 };

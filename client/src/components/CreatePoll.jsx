@@ -1,78 +1,77 @@
-import React, { Component, Fragment } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { createPoll } from "../store/actions";
+import { useNavigate } from "react-router-dom";
 
-class CreatePoll extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      question: "",
-      options: [""],
-    };
+const CreatePoll = ({ createPoll }) => {
+  const [state, setState] = useState({
+    question: "",
+    options: [""],
+  });
 
-    this.handleChange = this.handleChange.bind(this);
-    this.addAnswer = this.addAnswer.bind(this);
-    this.handleAnswer = this.handleAnswer.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  const navigate = useNavigate();
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
-  addAnswer() {
-    this.setState({ options: [...this.state.options, ""] });
-  }
+  const addAnswer = () => {
+    setState({ ...state, options: [...state.options, ""] });
+  };
 
-  handleAnswer(e, index) {
-    const options = [...this.state.options];
+  const handleAnswer = (e, index) => {
+    const options = [...state.options];
     options[index] = e.target.value;
-    this.setState({ options: options }); // or can be written as simple {options as both name same
-  }
+    setState({ ...state, options: options });
+  };
 
-  handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.props.createPoll(this.state);
-  }
+    createPoll(state)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-  render() {
-    const options = this.state.options.map((options, i) => (
-      <Fragment key={i}>
-        <label className="form-label">option</label>
-        <input
-          className="form-input"
-          type="text"
-          value={options}
-          onChange={(e) => this.handleAnswer(e, i)}
-        />
-      </Fragment>
-    ));
+  const options = state.options.map((options, i) => (
+    <React.Fragment key={i}>
+      <label className="form-label">option</label>
+      <input
+        className="form-input"
+        type="text"
+        value={options}
+        onChange={(e) => handleAnswer(e, i)}
+      />
+    </React.Fragment>
+  ));
 
-    return (
-      <form className="form" onSubmit={this.handleSubmit}>
-        <label className="form-label" htmlFor="question">
-          Question
-        </label>
-        <input
-          className="form-input"
-          type="text"
-          name="question"
-          value={this.state.question}
-          onChange={this.handleChange}
-        />
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      <label className="form-label" htmlFor="question">
+        Question
+      </label>
+      <input
+        className="form-input"
+        type="text"
+        name="question"
+        value={state.question}
+        onChange={handleChange}
+      />
 
-        {options}
-        <div className="button-center">
-          <button className="button" type="button" onClick={this.addAnswer}>
-            Add options
-          </button>
-          <button className="button" type="submit">
-            Submit
-          </button>
-        </div>
-      </form>
-    );
-  }
-}
+      {options}
+      <div className="button-center">
+        <button className="button" type="button" onClick={addAnswer}>
+          Add options
+        </button>
+        <button className="button" type="submit">
+          Submit
+        </button>
+      </div>
+    </form>
+  );
+};
 
-export default connect(() => ({}), { createPoll })(CreatePoll);
+export default connect(null, { createPoll })(CreatePoll);

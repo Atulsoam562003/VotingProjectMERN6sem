@@ -2,15 +2,18 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import Auth from "../components/Auth";
 import ErrorMessage from "../components/ErrorMessage";
+import EmailSent from "../components/EmailSent";
 
-const AuthPage = ({ authType, isAuthenticated }) => {
+const AuthPage = ({ AuthPageType, isAuthenticated }) => {
   if (isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/poll" />;
   }
+  // console.log(AuthPageType);
   return (
     <div>
-      <ErrorMessage />
-      <Auth authType={authType} />
+      <ErrorMessage authType={AuthPageType} />
+      <EmailSent />
+      <Auth authType={AuthPageType} />
     </div>
   );
 };

@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import swal from "sweetalert2";
 
 import { authUser, logout } from "../store/actions";
+// import ErrorMessage from "./ErrorMessage";
+function isValidEmail(email) {
+  return email.endsWith("@iiitg.ac.in");
+}
 class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
       password: "",
+      emailSent: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,7 +27,20 @@ class Auth extends Component {
     const { authType } = this.props;
     e.preventDefault();
 
+    // Validate email format before submission
+    if (!isValidEmail(username) && authType === "register") {
+      swal.fire({
+        title: "Invalid Email Format",
+        text: "Please use a valid IIITG email address (e.g., username@iiitg.ac.in).",
+        icon: "error",
+      });
+      this.setState({ username: "", password: "" });
+      // window.location.reload();
+      return; // Prevent form submission
+    }
     this.props.authUser(authType || "login", { username, password });
+    this.setState({ username: "", password: "", emailSent: true });
+    // window.location.reload();
   }
 
   render() {
@@ -31,7 +50,7 @@ class Auth extends Component {
       <div>
         <form className="form" onSubmit={this.handleSubmit}>
           <label className="form-label" htmlFor="username">
-            username
+            emailId
           </label>
           <input
             className="form-input"
@@ -59,9 +78,17 @@ class Auth extends Component {
             </button>
           </div>
         </form>
+        {/* {emailSent && (
+          <div>
+            <p>An email has been sent. Please check your inbox.</p>
+          </div>
+        )} */}
       </div>
     );
   }
 }
 // first parameter is mapping store to props and second one dispatches to props
-export default connect(() => ({}), { authUser, logout })(Auth);
+export default connect((state) => ({ error: state.error }), {
+  authUser,
+  logout,
+})(Auth);

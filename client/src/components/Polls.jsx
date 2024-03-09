@@ -1,59 +1,55 @@
-import React, { Component, Fragment } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getPolls, getUserPolls, getCurrentPoll } from "../store/actions";
+import { Navigate, useNavigate } from "react-router-dom";
 
-class Polls extends Component {
-  constructor(props) {
-    // props coming from redux
-    super(props);
-    this.handleSelect = this.handleSelect.bind(this);
-  }
-  componentDidMount() {
-    const { getPolls } = this.props;
-    getPolls();
-  }
+const Polls = (props) => {
+  const { auth, polls, getPolls, getUserPolls } = props;
+  const navigate = useNavigate();
 
-  handleSelect(id) {
-    const { router } = this.props;
-    const { navigate } = router;
+  useEffect(() => {
+    // Redirect to "/" if auth.isAuthenticated is false
+    if (!auth.isAuthenticated) {
+      navigate("/");
+    } else {
+      getPolls();
+    }
+  }, [auth.isAuthenticated, navigate, getPolls]);
+
+  const handleSelect = (id) => {
     navigate(`/poll/${id}`);
-  }
+  };
 
-  render() {
-    const { auth, getPolls, getUserPolls } = this.props;
-    const polls = this.props.polls.map((poll) => (
-      <li
-        onClick={() => {
-          this.handleSelect(poll._id);
-        }}
-        key={poll._id}
-      >
-        {poll.question}
-      </li>
-    ));
+  const pollList = polls.map((poll) => (
+    <li key={poll._id} onClick={() => handleSelect(poll._id)}>
+      {poll.question}
+    </li>
+  ));
 
-    return (
-      <Fragment>
-        {auth.isAuthenticated && (
-          <div className="button-center">
-            <button className="button" onClick={getPolls}>
-              All polls
-            </button>
-            <button className="button" onClick={getUserPolls}>
-              My polls
-            </button>
-          </div>
-        )}
-        <ul className="polls">{polls}</ul>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <div>
+      {auth.isAuthenticated && (
+        <div className="button-center">
+          <button className="button" onClick={getPolls}>
+            All polls
+          </button>
+          <button className="button" onClick={getUserPolls}>
+            My polls
+          </button>
+        </div>
+      )}
+      <ul className="polls">{pollList}</ul>
+    </div>
+  );
+};
 
-export default connect(
-  (store) => ({
-    auth: store.auth,
-    polls: store.polls,
-  }),
-  { getPolls, getUserPolls, getCurrentPoll }
-)(Polls);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  polls: state.polls,
+});
+
+export default connect(mapStateToProps, {
+  getPolls,
+  getUserPolls,
+  getCurrentPoll,
+})(Polls);

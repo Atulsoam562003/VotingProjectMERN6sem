@@ -1,4 +1,5 @@
 import { addError, removeError } from "./error";
+import { addSuccessMessage } from "./success";
 import { SET_CURRENT_USER } from "../actionTypes";
 import api from "../../services/api";
 
@@ -28,6 +29,12 @@ export const authUser = (path, data) => {
       api.setToken(token);
       dispatch(setCurrentUser(user));
       dispatch(removeError());
+
+      // dispatch(
+      //   addSuccessMessage(
+      //     "Registration successful! Please check your email for verification."
+      //   )
+      // );
     } catch (err) {
       const error = err.response.data;
       dispatch(addError(error.message));
