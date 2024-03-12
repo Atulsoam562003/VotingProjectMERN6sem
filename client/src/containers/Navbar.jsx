@@ -44,6 +44,11 @@ const Navbar = ({ auth, logout }) => (
         {auth.isAuthenticated && (
           <Fragment>
             <li>
+              <Link className="navbar-item" to="/poll">
+                Polls
+              </Link>
+            </li>
+            <li>
               <a className="navbar-item" onClick={logout}>
                 Logout
               </a>

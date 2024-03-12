@@ -1,2 +1,2 @@
-cd server && npm i && npm start &
-cd client && npm i && npm start
+cd server && node index.js &
+cd client && npm start
