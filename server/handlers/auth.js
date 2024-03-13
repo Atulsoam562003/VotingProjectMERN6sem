@@ -55,7 +55,8 @@ exports.register = async (req, res, next) => {
 //send verification email
 const sendVerificationEmail = async (id, username, res) => {
   try {
-    const currentUrl = "http://localhost:4000";
+    const currentUrl =
+      "https://voting-backend-si7q.onrender.com" || "http://localhost:4000";
     const uniqueString = uuidv4() + id;
 
     // Hash the unique string before saving
