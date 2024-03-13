@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Replace 'http://localhost:4000/api' with the actual deployment URL of your backend
-const host = "http://https://voting-backend-si7q.onrender.com/api";
+const host = "https://voting-backend-si7q.onrender.com/api";
+// const host = "http://localhost:4000/api";
 
 export const setToken = (token) => {
   if (token) {
